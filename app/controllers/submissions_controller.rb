@@ -5,8 +5,24 @@ class SubmissionsController < ApplicationController
   def new
   end
 
-  def submissions
+  def show
+    @submission = Submission.find(params[:id])
   end
 
-  private
+  def create
+    @submission = Submission.new(form_params)
+    if @submission.save
+      redirect_to @submission
+    else
+      flash.now[:error] = "Oops, something went wrong with your submission. Please try again!"
+      render :new
+    end
+  end
+
+  def form_params
+    params.require(:submission).permit(
+      :title,
+      :stripe_payment_id
+    )
+  end
 end
