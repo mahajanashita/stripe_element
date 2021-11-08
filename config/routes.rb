@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  
+  devise_for :users
   resources :submissions
   resources :payment_intents
   resources :webhooks ,only: [:create]
