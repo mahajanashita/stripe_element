@@ -2,7 +2,7 @@ class PaymentIntentsController < ApplicationController
   def create
     # Create a payment intent with the expected amount,
     payment_intent = Stripe::PaymentIntent.create(
-      amount: 1000,
+      amount: 100,
       currency: 'usd',
       description: "Order for ",
       statement_descriptor: 'TimeSink submit',

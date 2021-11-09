@@ -5,7 +5,7 @@ class WebhooksController < ApplicationController
     payload = request.body.read
     sig_header = request.env['HTTP_STRIPE_SIGNATURE']
     event = nil
-    endpoint_secret = "we_1Jr5H2SI4B2eD0U7FNZm9aeG"
+    endpoint_secret = "we_1JtWSlCNQtckV3FXG6tJBqF0"
 
     begin
       event = Stripe::Webhook.construct_event(
@@ -25,6 +25,11 @@ class WebhooksController < ApplicationController
     case event.type
     when 'payment_intent.succeeded'
       payment_intent = event.data.object # contains a Stripe::PaymentIntent
+
+        #user with the stripe id there subcription status to active
+
+      @user = User.find_by(stripe_customer_id: payment_intent.customer)
+      @user.update(subscription_status: 'active')
 
       puts "PaymentIntent succeeded"
       @submission = Submission.find_by!(stripe_payment_id: payment_intent.id)
